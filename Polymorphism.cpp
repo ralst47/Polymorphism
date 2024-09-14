@@ -54,5 +54,5 @@ int main()
 
     delete shape1;
     delete shape2;
-    int test = 1;
+    float testfloat = 0.5f;
 }
