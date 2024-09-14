@@ -54,4 +54,5 @@ int main()
 
     delete shape1;
     delete shape2;
+    int test = 1;
 }
