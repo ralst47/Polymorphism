@@ -1,22 +1,23 @@
 ﻿#include <iostream>
+#include <vector>
 
-class IFigere { // Абстрактный класс
+class IFigure { // Абстрактный класс
 public:
 	virtual void draw() = 0; // Чисто виртуальный метод
-	virtual ~IFigere() = default; // Виртуальный стандартный деструктор
+	virtual ~IFigure() = default; // Виртуальный стандартный деструктор для вызова деструктора производного класса
 };
 
-struct Square :IFigere {
+struct Square :IFigure {
 	std::string tetromino = "Квадрат";
 	void draw()override { std::cout << "Фигура0: " << tetromino << std::endl; }
 };
 
-struct Rectangle :IFigere {
+struct Rectangle :IFigure {
 	std::string tetromino = "Прямоугольник";
 	void draw()override { std::cout << "Фигура1: " << tetromino << std::endl; }
 };
 
-struct Line :IFigere {
+struct Line :IFigure {
 	std::string tetromino = "Палка";
 	void draw()override { std::cout << "Фигура2: " << tetromino << std::endl; }
 };
@@ -24,15 +25,14 @@ struct Line :IFigere {
 int main() {
 	setlocale(LC_ALL, "Russian");
 
-	IFigere* figures[] = { new(Square),new(Rectangle),new(Line) };
+	std::vector<std::unique_ptr<IFigure>> figures; // Создаем вектор уникальных указателей
 
-	for (auto figure : figures) {
+	figures.push_back(std::make_unique<Square>()); // Добавляем объекты в вектор
+	figures.push_back(std::make_unique<Rectangle>());
+	figures.push_back(std::make_unique<Line>());
+
+	for (const auto& figure : figures) {
 		figure->draw(); // вызов полиморфных методов
-	}
-
-	for (auto figure : figures) {
-		delete figure; // Вызвов деструктора
-		figure = nullptr;
 	}
 
 	return 0;
