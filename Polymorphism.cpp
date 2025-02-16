@@ -1,10 +1,9 @@
 ﻿#include <iostream>
 #include <vector>
 
-class IFigure { // Абстрактный класс
-public:
+struct IFigure { // Абстрактный класс (интерфейс)
 	virtual void draw() = 0; // Чисто виртуальный метод
-	virtual ~IFigure() = default; // Виртуальный стандартный деструктор для вызова деструктора производного класса
+	virtual ~IFigure() = default; // Виртуальный деструктор по умолчанию, для вызова деструктора производного класса
 };
 
 struct Square :IFigure {
@@ -22,6 +21,15 @@ struct Line :IFigure {
 	void draw()override { std::cout << "Фигура2: " << tetromino << std::endl; }
 };
 
+
+struct Cursor {
+	void control(IFigure& figure) {
+		std::cout << std::endl << "Управляю курсором: ";// << std::endl;
+		figure.draw();
+	}
+};
+
+
 int main() {
 	setlocale(LC_ALL, "Russian");
 
@@ -34,6 +42,13 @@ int main() {
 	for (const auto& figure : figures) {
 		figure->draw(); // вызов полиморфных методов
 	}
+
+	Cursor cursor;
+	//Square figure;// Square или Rectangle или Line
+	//cursor.control(figure);
+	// Или то же самое
+	std::unique_ptr<IFigure> pfigure = std::make_unique<Square>();// <Square> или <Rectangle> или <Line>
+	cursor.control(*pfigure);
 
 	return 0;
 }
